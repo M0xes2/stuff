@@ -1,3 +1,6 @@
+const {ObjectId} = require("mongodb")
+const Page = require("../Models/stuff")
+
 exports.homePage = (req, res) => {
     const data = ["super", "cool", "BALLER"];
     try {
@@ -17,5 +20,16 @@ exports.authMiddlewareSample = (req, res, next)=>{
     }
     else {
         res.json("You is a special");
+    }
+}
+
+exports.createPage = async (req, res) => {
+    try {
+        const page = new Page(req.body)
+        await page.save();
+        res.json(`Congrats! You've done clapped the pages ${page}`);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
     }
 }
