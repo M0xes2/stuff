@@ -1,10 +1,13 @@
-const mongoose = require("mongoose")
-require("dotenv").config({path:" variables.env "})
-mongoose.connect(`mongodb+srv://maxesoflife:CFYcSjqtCiELGzZK@cluster0.u4ah7bh.mongodb.net/?retryWrites=true&w=majority`, {
+const mongoose = require("mongoose");
+require("dotenv").config({ path: "variables.env" });
+
+mongoose
+  .connect(`${process.env.DATABASE}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-}).then(()=> console.log("connected to DB"));
+  })
+  .then(() => console.log("connected to DB"));
 
-mongoose.connection.on("error", (err) =>{
-    console.log(`${err.message}`)
+mongoose.connection.on("error", (err) => {
+  console.log(`${err.message}`);
 });
