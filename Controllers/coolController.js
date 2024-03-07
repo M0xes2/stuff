@@ -1,18 +1,19 @@
 const { ObjectId } = require("mongodb");
-const User = require("../Models/stuff").user;
-const Page = require("../Models/stuff").page;
+const User = require("../Models/userSchema");
+const Page = require("../Models/stuff");
 
 exports.homePage = (req, res) => {
-  if (!req.username) {
-    req.username = "";
-  }
-  res.json(`Welcome${req.username}!`);
+  res.json(`Welcome!`);
 };
 
 //add proper auth (check if user and pass match)
 exports.authMiddleware = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
+    const inputuser = new User(req.body);
+    const user_acc = await User.findOne(inputuser.name);
+    if (!user_acc) {
+      res.json(`Incorrect Username`)
+    }
     req.username = " " + user.name;
     next();
   } catch (error) {
@@ -25,7 +26,7 @@ exports.createAccount = async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
-    res.json(`Welcome ${user.name}!`);
+    res.json(`Welcome ${user.username}!`);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);

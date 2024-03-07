@@ -1,15 +1,14 @@
 const express = require("express");
 const router = new express.Router();
 const coolController = require("../Controllers/coolController");
+const authController = require("../Controllers/authController");
 
 router.get("/", coolController.homePage);
 
 router.get(
-  "/login/:id",
-  coolController.authMiddleware,
-  coolController.homePage
+  "/login", authController.login
 );
-router.post("/signup", coolController.createAccount);
+router.post("/signup", authController.register);
 router.delete("/removeuser/:id", coolController.deleteUser);
 
 router.get("/pages", coolController.getPages);
