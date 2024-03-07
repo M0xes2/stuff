@@ -10,6 +10,7 @@ router.get(
 );
 router.post("/signup", authController.register);
 router.delete("/removeuser/:id", coolController.deleteUser);
+router.get("/protected", authController.authCheck, authController.protected);
 
 router.get("/pages", coolController.getPages);
 router.post("/add", coolController.createPage);
