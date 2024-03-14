@@ -12,6 +12,7 @@ const pageSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  photo: String,
   tags: {
     type: [String],
     trim: true,

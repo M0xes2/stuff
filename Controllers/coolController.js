@@ -1,25 +1,10 @@
 const { ObjectId } = require("mongodb");
 const User = require("../Models/userSchema");
 const Page = require("../Models/stuff");
+const path = require("path");
 
 exports.homePage = (req, res) => {
   res.json(`Welcome!`);
-};
-
-//add proper auth (check if user and pass match)
-exports.authMiddleware = async (req, res, next) => {
-  try {
-    const inputuser = new User(req.body);
-    const user_acc = await User.findOne(inputuser.name);
-    if (!user_acc) {
-      res.json(`Incorrect Username`)
-    }
-    req.username = " " + user.name;
-    next();
-  } catch (error) {
-    console.log(error);
-    res.json("Please enter valid account details.");
-  }
 };
 
 exports.createAccount = async (req, res) => {
@@ -36,6 +21,13 @@ exports.createAccount = async (req, res) => {
 exports.createPage = async (req, res) => {
   try {
     const page = new Page(req.body);
+    try {
+      page.photo = req.file.path;
+    }
+    catch (e) {
+      console.log("No image")
+    }
+    
     await page.save();
     res.json(`Congrats! You've done clapped the pages ${page}`);
   } catch (error) {
