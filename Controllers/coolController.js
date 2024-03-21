@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const User = require("../Models/userSchema");
 const Page = require("../Models/stuff");
-const path = require("path");
+
 
 exports.homePage = (req, res) => {
   res.json(`Welcome!`);
