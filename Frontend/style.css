@@ -14,3 +14,35 @@ body{
     color:white
     margin: 5px auto
 }
+
+.card{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    width: 26%;
+    height: 60rem;
+    background-color: whitesmoke;
+    border: 1px solid black;
+    margin: 10px auto;
+}
+
+.card-header{
+    font-size: 50px;
+}
+
+.card-img{
+    width: 60%;
+    height: 75%;
+    object-fit: cover;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 90vw;
+    margin: 10px auto;
+    background-color:aquamarine;
+}
