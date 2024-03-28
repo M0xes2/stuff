@@ -1,5 +1,4 @@
 const multer = require("multer");
-const path = require("path");
 const multerOptions = {
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
@@ -11,7 +10,7 @@ const multerOptions = {
   }),
   fileFilter: function (req, file, next) {
     //can also set limit in multer
-    const isPhoto = file.mimetype.match(/\.(jpg|jpeg|png)$/);
+    const isPhoto = file.mimetype.startsWith("image/");
     if (isPhoto) {
       next(null, true); //callback function, first value is error, second value gets passed on if no error
     } else
@@ -21,4 +20,4 @@ const multerOptions = {
         false;
   },
 };
-exports.upload = multer(multerOptions).single("image");
+exports.upload = multer(multerOptions).single("photo");
