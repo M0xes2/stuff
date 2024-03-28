@@ -2,7 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const coolController = require("../Controllers/coolController");
 const middlewareUpload = require("../MiDDleware/middlewarUpload")
-const authController = require("../Controllers/authController");
+const authController = require("../Backend/Controllers/authController");
 
 router.get("/", coolController.homePage);
 router.post("/uploadTest", middlewareUpload.upload, coolController.createPage);
