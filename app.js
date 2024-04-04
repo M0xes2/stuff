@@ -1,6 +1,12 @@
 const express = require("express");
 const port = process.env.PORT || 3000;
+const cors = require("cors");
 const app = express();
+let corsOptions ={
+  origin: "*",
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions))
 require("./DB/mongoose");
 const routes = require("./Routes/index");
 app.use(express.json());
