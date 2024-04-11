@@ -14,11 +14,16 @@ exports.register = async function (req, res) {
   if (!req.body.username || !req.body.password) {
     res.json({ success: false, msg: "Please pass username and password." });
   } else {
-    console.log(req.body.username);
-    console.log(req.body.password);
+    username = req.body.username;
+    password = req.body.password;
+    let user = await User.findOne({ username });
+    if (user) {
+      res.json({ success: false, msg: "Please make a different username." });
+      return
+    }
     let newUser = new User({
-      username: req.body.username,
-      password: req.body.password,
+      username: username,
+      password: password,
     });
     const token = await generateToken(newUser);
 
