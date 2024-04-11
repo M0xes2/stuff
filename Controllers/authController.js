@@ -47,37 +47,37 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       throw new Error("Unable to login");
     }
-    delete user.password
+    delete user.password;
     res.send({ user, token });
   } catch (error) {
     console.log(error);
-    res.status(400).send("user not found");
+    res.status(400).json("user not found");
   }
 };
 
 exports.authCheck = async (req, res, next) => {
-    try {
-      const token = req.header("Authorization").replace("Bearer ", "");
-      const decoded = jwt.verify(token, `${process.env.SECRET}`);
-      const user = await User.findOne({
-        _id: decoded._id,
-      });
-  
-      if (!user) {
-        throw new Error();
-      }
-      req.token = token;
-      req.user = user; //route hanlder now will not have to fetch the user account
-      next();
-    } catch (e) {
-      res.status(401).send({ error: "Please authenticate." });
+  try {
+    const token = req.header("Authorization").replace("Bearer ", "");
+    const decoded = jwt.verify(token, `${process.env.SECRET}`);
+    const user = await User.findOne({
+      _id: decoded._id,
+    });
+
+    if (!user) {
+      throw new Error();
     }
-  };
-  exports.protected = async (req, res) => {
-    let user = req.user;
-    try {
-      res.json({ user });
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  };
+    req.token = token;
+    req.user = user; //route hanlder now will not have to fetch the user account
+    next();
+  } catch (e) {
+    res.status(401).send({ error: "Please authenticate." });
+  }
+};
+exports.protected = async (req, res) => {
+  let user = req.user;
+  try {
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
