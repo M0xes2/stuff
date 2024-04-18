@@ -12,7 +12,7 @@ router.post("/signup", authController.register);
 router.delete("/removeuser/:id", coolController.deleteUser);
 router.get("/protected", authController.authCheck, authController.protected);
 
-router.get("/pages", coolController.getPages);
+router.get("/page/:id", coolController.getPage);
 router.post("/add", coolController.createPage);
 router.patch("/update/:id", coolController.updatePage);
 router.delete("/remove/:id", coolController.deletePage);

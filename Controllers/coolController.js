@@ -23,13 +23,12 @@ exports.createPage = async (req, res) => {
     const page = new Page(req.body);
     try {
       page.photo = req.file.path;
+    } catch (e) {
+      console.log("No image");
     }
-    catch (e) {
-      console.log("No image")
-    }
-    
+
     await page.save();
-    res.json(`Congrats! You've done clapped the pages ${page}`);
+    res.json(page);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
@@ -49,10 +48,13 @@ exports.updatePage = async (req, res) => {
   }
 };
 
-exports.getPages = async (req, res) => {
+exports.getPage = async (req, res) => {
   try {
-    const Pages = await Page.find().limit(2);
-    res.json(Pages);
+    const page = await Page.findById(req.params.id);
+    if (!page) {
+      res.status(404).send();
+    }
+    res.json(page);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
@@ -78,7 +80,7 @@ exports.deletePage = async (req, res) => {
     if (!page) {
       res.status(404).send();
     }
-    res.send(`${page.name} was deleted!`);
+    res.json(`${page.name} was deleted!`);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
