@@ -81,6 +81,7 @@ exports.authCheck = async (req, res, next) => {
 exports.protected = async (req, res) => {
   let user = req.user;
   try {
+    delete user.password
     res.json({ user });
   } catch (error) {
     res.status(500).json(error);
