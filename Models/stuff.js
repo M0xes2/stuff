@@ -17,7 +17,6 @@ const pageSchema = new mongoose.Schema({
     type: [String],
     trim: true,
   },
-  author: String,
 });
 
 pageSchema.pre("save", function (next) {
