@@ -19,7 +19,7 @@ exports.register = async function (req, res) {
     let user = await User.findOne({ username });
     if (user) {
       res.json({ success: false, msg: "Please make a different username." });
-      return
+      return;
     }
     let newUser = new User({
       username: username,
@@ -28,6 +28,7 @@ exports.register = async function (req, res) {
     const token = await generateToken(newUser);
 
     await newUser.save();
+    newUser.password = "";
     res.json({
       success: true,
       msg: "Successful created new user.",
@@ -52,7 +53,7 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       throw new Error("Unable to login");
     }
-    delete user.password;
+    user.password = "";
     res.send({ user, token });
   } catch (error) {
     console.log(error);
@@ -80,6 +81,7 @@ exports.authCheck = async (req, res, next) => {
 };
 exports.protected = async (req, res) => {
   let user = req.user;
+  user.password = "";
   try {
     res.json({ user });
   } catch (error) {
