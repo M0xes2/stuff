@@ -14,7 +14,7 @@ router.get("/protected", authController.authCheck, authController.protected);
 
 router.get("/page/:id", coolController.getPage);
 router.post("/add", coolController.createPage);
-router.patch("/update/:id", coolController.updatePage);
-router.delete("/remove/:id", coolController.deletePage);
+router.patch("/update/:id", authController.authCheck, coolController.updatePage);
+router.delete("/remove/:id", authController.authCheck, coolController.deletePage);
 
 module.exports = router;

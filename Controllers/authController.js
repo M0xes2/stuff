@@ -12,14 +12,13 @@ const generateToken = async function (user) {
 
 exports.register = async function (req, res) {
   if (!req.body.username || !req.body.password) {
-    res.json({ success: false, msg: "Please pass username and password." });
+    res.json({ success: false, msg: "Please put a username and password." });
   } else {
     username = req.body.username;
     password = req.body.password;
     let user = await User.findOne({ username });
     if (user) {
       res.json({ success: false, msg: "Please make a different username." });
-      return;
     }
     let newUser = new User({
       username: username,
@@ -40,24 +39,29 @@ exports.register = async function (req, res) {
 
 exports.login = async (req, res) => {
   try {
+    if (!req.body.username || !req.body.password) {
+      res.json({ success: false, msg: "Please put a username and password." });
+    }
     let username = req.body.username;
     let password = req.body.password;
-    let user = await User.findOne({ username });
 
+    let user = await User.findOne({ username });
+    
     if (!user) {
-      throw new Error("Unable to login");
+      res.json({ success: false, msg: "Unable to login. Please check your username or password." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    const token = await generateToken(user);
     if (!isMatch) {
-      throw new Error("Unable to login");
+      res.json({ success: false, msg: "Unable to login. Please check your username or password."  });
     }
+    const token = await generateToken(user);
+    
     user.password = "";
-    res.send({ user, token });
+    res.send({"success":true, user, token });
   } catch (error) {
     console.log(error);
-    res.status(400).json("user not found");
+    res.send({"success":false, msg:"Womp womp"});
   }
 };
 
