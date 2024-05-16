@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const User = require("../Models/userSchema");
 const Page = require("../Models/stuff");
-const path = require("path");
+
 
 exports.homePage = (req, res) => {
   res.json(`Welcome!`);
@@ -18,9 +18,32 @@ exports.createAccount = async (req, res) => {
   }
 };
 
+exports.updatePFP = async (req, res) => {
+  try {
+    console.log(req.photo);
+    res.json(req.file)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      res.status(404).send();
+    }
+    res.send(`${user.name} was deleted!`);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
+
 exports.createPage = async (req, res) => {
   try {
-    if (req.user != req.body.user) {
+    if (req.body.author != req.user.username) {
       res.json("Upload Failed.");
       return;
     }
@@ -42,6 +65,7 @@ exports.createPage = async (req, res) => {
 exports.updatePage = async (req, res) => {
   try {
     const page = await Page.findById(req.params.id);
+    
     if (!page || page.author != req.user.username) {
       res.json("Denied Access");
       return;
@@ -64,19 +88,6 @@ exports.getPage = async (req, res) => {
       return;
     }
     res.json(page);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-};
-
-exports.deleteUser = async (req, res) => {
-  try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) {
-      res.status(404).send();
-    }
-    res.send(`${user.name} was deleted!`);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
