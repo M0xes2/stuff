@@ -12,9 +12,8 @@ const pageSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  photo: String,
-  tags: {
-    type: [String],
+  author: {
+    type: String,
     trim: true,
   },
 });

@@ -20,6 +20,10 @@ exports.createAccount = async (req, res) => {
 
 exports.createPage = async (req, res) => {
   try {
+    if (req.user != req.body.user) {
+      res.json("Upload Failed.");
+      return;
+    }
     const page = new Page(req.body);
     try {
       page.photo = req.file.path;
@@ -38,6 +42,10 @@ exports.createPage = async (req, res) => {
 exports.updatePage = async (req, res) => {
   try {
     const page = await Page.findById(req.params.id);
+    if (!page || page.author != req.user.username) {
+      res.json("Denied Access");
+      return;
+    }
     const updates = Object.keys(req.body);
     updates.forEach((update) => (page[update] = req.body[update]));
     await page.save();
@@ -53,6 +61,7 @@ exports.getPage = async (req, res) => {
     const page = await Page.findById(req.params.id);
     if (!page) {
       res.status(404).send();
+      return;
     }
     res.json(page);
   } catch (error) {
@@ -76,10 +85,12 @@ exports.deleteUser = async (req, res) => {
 
 exports.deletePage = async (req, res) => {
   try {
-    const page = await Page.findByIdAndDelete(req.params.id);
-    if (!page) {
+    const page = await Page.findById(req.params.id);
+    if (!page || page.author != req.user.username) {
       res.status(404).send();
+      return;
     }
+    await Page.findByIdAndDelete(req.params.id);
     res.json(`${page.name} was deleted!`);
   } catch (error) {
     console.log(error);

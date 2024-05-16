@@ -41,27 +41,35 @@ exports.login = async (req, res) => {
   try {
     if (!req.body.username || !req.body.password) {
       res.json({ success: false, msg: "Please put a username and password." });
+      return;
     }
     let username = req.body.username;
     let password = req.body.password;
 
     let user = await User.findOne({ username });
-    
+
     if (!user) {
-      res.json({ success: false, msg: "Unable to login. Please check your username or password." });
+      res.json({
+        success: false,
+        msg: "Unable to login. Please check your username or password.",
+      });
+      return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      res.json({ success: false, msg: "Unable to login. Please check your username or password."  });
+      res.json({
+        success: false,
+        msg: "Unable to login. Please check your username or password.",
+      });
+      return;
     }
     const token = await generateToken(user);
-    
+
     user.password = "";
-    res.send({"success":true, user, token });
+    res.send({ success: true, user, token });
   } catch (error) {
-    console.log(error);
-    res.send({"success":false, msg:"Womp womp"});
+    res.json({ success: false, msg: "Womp womp" });
   }
 };
 
@@ -87,7 +95,7 @@ exports.protected = async (req, res) => {
   let user = req.user;
   user.password = "";
   try {
-    delete user.password
+    delete user.password;
     res.json({ user });
   } catch (error) {
     res.status(500).json(error);
