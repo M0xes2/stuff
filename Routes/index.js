@@ -14,7 +14,11 @@ router.get("/protected", authController.authCheck, authController.protected);
 
 router.get("/page/:id", coolController.getPage);
 router.post("/add", authController.authCheck, coolController.createPage);
-router.patch("/update/:id",  authController.authCheck, coolController.updatePage);
+router.patch(
+  "/update/:id",
+  authController.authCheck,
+  coolController.updatePage
+);
 router.delete(
   "/remove/:id",
   authController.authCheck,

@@ -2,7 +2,6 @@ const { ObjectId } = require("mongodb");
 const User = require("../Models/userSchema");
 const Page = require("../Models/stuff");
 
-
 exports.homePage = (req, res) => {
   res.json(`Welcome!`);
 };
@@ -20,8 +19,7 @@ exports.createAccount = async (req, res) => {
 
 exports.updatePFP = async (req, res) => {
   try {
-    console.log(req.photo);
-    res.json(req.file)
+    res.json("Success!");
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
@@ -65,7 +63,7 @@ exports.createPage = async (req, res) => {
 exports.updatePage = async (req, res) => {
   try {
     const page = await Page.findById(req.params.id);
-    
+
     if (!page || page.author != req.user.username) {
       res.json("Denied Access");
       return;
